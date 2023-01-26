@@ -32,12 +32,17 @@ jobs:
           tags: |
             latest
             ${{ steps.date.outputs.date }}
+      - id: string
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ github.repository_owner }}
       - name: Build and Push
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=refistry,ref=latest
+          tags: |
+            ghcr.io/${{ steps.string.outputs.lowercase }}/${{ env.IMAGE_NAME }}:latest
+            ghcr.io/${{ steps.string.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ steps.date.outputs.date }}
+          cache-from: type=refistry,ref=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
           cache-to: type=inline,mode=max
