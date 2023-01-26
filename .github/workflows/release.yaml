@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: yaskkserv2
+    permissions:
+      packages: write
     steps:
       - name: Get current date
         id: date
